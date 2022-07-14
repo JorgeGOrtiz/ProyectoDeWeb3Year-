@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Ashi
+  Date: 18/06/2022
+  Time: 15:34
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+
+</h:head>
+
+<h:body>
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">Administrar transaccion</ui:define>
+        <ui:define name="content">
+            <h1>Administrar Transaccion</h1>
+            #{transaccion_bean.init()}
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <div class="row">
+                    <div class="col col-sm-2">
+                        <p:commandButton styleClass="btn btn-primary mr-2" icon="mdi mdi-library-plus" value="Adicionar" process="@this" actionListener="#{transaccion_bean.clean_variables}"
+                                         oncomplete="PF('addTransaccionDialog').show()"
+                                         style="margin-right: .5rem"/>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-12">
+                        <p:dataTable tableStyleClass="table-striped" id="dt-transaccion" var="transaccion" value="#{transaccion_bean.list_transaccion}" reflow="true" styleClass="table"
+                                     paginator="true" rows="10" paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="table-header">
+                                    <span style="front-weight: bold">Transacciones</span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Id de transacciones" filterBy="#{transaccion.idTransaccion}" sortBy="#{transaccion.idTransaccion}">
+                                <h:outputText value="#{transaccion.idTransaccion}"/>
+                            </p:column>
+                            <p:column headerText="Fecha" filterBy="#{transaccion.fecha}" sortBy="#{transaccion.fecha}">
+                                <h:outputText value="#{transaccion.fecha}"/>
+                            </p:column>
+                            <p:column headerText="Monto de transaccion" filterBy="#{transaccion.montoTransaccion}" sortBy="#{transaccion.montoTransaccion}">
+                                <h:outputText value="#{transaccion.montoTransaccion}"/>
+                            </p:column>
+                             <p:column headerText="Opciones" exportable="false">
+                                <p:commandButton icon="ui-icon-info" update=":form:info-transaccion-content" process="@this" oncomplete="PF('infoTransaccionDialog').show()">
+                                    <f:setPropertyActionListener value="#{transaccion}" target="#{transaccion_bean.transaccion}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-edit" update=":form:edit-transaccion-content" process="@this" oncomplete="PF('editTransaccionDialog').show()" actionListener="#{transaccion_bean.copyEdit(transaccion)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" process="@this" oncomplete="PF('deleteTransaccionDialog').show()">
+                                    <f:setPropertyActionListener value="#{transaccion}" target="#{transaccion_bean.transaccion}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <!--Adicionar dialog-->
+                <p:dialog header="Adicionar transaccion" height="400" width="450" showEffect="fade" modal="true" widgetVar="addTransaccionDialog" id="addTransaccionDialog" resposive= "true">
+                    <p:outputPanel id="manage-transaccion-content" class="ui-fluid">
+                        #{transaccion_bean.clean_variables()}
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <p:outputLabel for="id">Identificación: </p:outputLabel>
+                                <p:inputNumber id="id" value="#{transaccion_bean.idTransaccion}" decimalPlaces="0"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="date">Fecha: </p:outputLabel>
+                                <p:datePicker id="date" value="#{transaccion_bean.fecha}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="mont">Monto: </p:outputLabel>
+                                <p:inputNumber id="mont" value="#{transaccion_bean.montoTransaccion}" decimalPlaces="3"  />
+                            </div>
+                                </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio" style="width: 70%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{transaccion_bean.createTransaccion()}"
+                                         update="manage-transaccion-content" process="manage-transaccion-content @this"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addTransaccionDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+                <!--info dialog-->
+                <p:dialog header="Informaci&oacute;n de transaccion" width="450" showEffect="fade" modal="true"
+                          widgetVar="infoTransaccionDialog" id="infoTransaccionDialog" responsive="true">
+                    <p:outputPanel id="info-transaccion-content" class="ui-fluid">
+                        <p:outputPanel>
+                              <div class="p-field">
+                                <strong>Identificación: </strong>
+                                <p:outputLabel>#{transaccion_bean.transaccion.idTransaccion}</p:outputLabel>
+                            </div>
+                            <div class="p-field">
+                                <strong>Fecha: </strong>
+                                <p:outputLabel>#{transaccion_bean.transaccion.fecha}</p:outputLabel>
+                            </div>
+                            <div class="p-field">
+                                <strong>Monto: </strong>
+                                <p:outputLabel>#{transaccion_bean.transaccion.montoTransaccion}</p:outputLabel>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('infoTransaccionDialog').hide()" class="ui-button-secundary"
+                                         update="info-transaccion-content" process="info-transaccion-content @this"/>
+
+                    </f:facet>
+
+                </p:dialog>
+                <!--editar dialog-->
+                <p:dialog header="Editar transaccion" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="editTransaccionDialog" id="editTransaccionDialog" resposive="true">
+                    <p:outputPanel id="edit-transaccion-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <p:outputLabel for="id1">Identificación: </p:outputLabel>
+                                <p:inputNumber id="id1" value="#{transaccion_bean.transaccion.idTransaccion}" />
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="date1">Fecha: </p:outputLabel>
+                                <p:datePicker id="date1" value="#{transaccion_bean.transaccion.fecha}" required="true"/>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="mont1">Monto: </p:outputLabel>
+                                <p:inputNumber id="mont1" value="#{transaccion_bean.transaccion.montoTransaccion}" />
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio" style="width: 70%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{transaccion_bean.edit()}"
+                                         update="edit-transaccion-content" process="edit-transaccion-content @this"/>
+                        <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('editTransaccionDialog').hide()" class="ui-button-secundary" update="edit-transaccion-content" process="edit-transaccion-content @this"/>
+                    </f:facet>
+                </p:dialog>
+                <!-- delete dialog-->
+                <p:confirmDialog widgetVar="deleteTransaccionDialog" showEffect="fade"  width="300"
+                                 message="Eliminar transaccion"
+                                 header="Confirm" severity="warn">
+                    <p:commandButton value="Si" icon="ui-icon-check" actionListener="#{transaccion_bean.delete}"
+                                     process="@this" oncomplete="PF('deleteTransaccionDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="ui-icon-times"
+                                     onclick="PF('deleteTransaccionDialog').hide()"/>
+                </p:confirmDialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="ui-icon-times"/>
+                </p:confirmDialog>
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>
