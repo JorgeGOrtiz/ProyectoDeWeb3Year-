@@ -100,7 +100,7 @@ public class AdminUsers_bean {
     }
 
     public void createUser(){
-        password= DigestUtils.shaHex(password);
+//        password= DigestUtils.shaHex(password);
         Users user = new Users(username,identificacion,nombre,email,password,enabled,descripcion);
         Users userFinded = restUsers.findUserByUsername(username);
         if (userFinded != null){
@@ -119,6 +119,7 @@ public class AdminUsers_bean {
         }
         init();
         list_roles.clear();
+        listUsers = restUsers.findAllUsers();
         PrimeFaces.current().executeScript("PF('addUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
@@ -140,9 +141,9 @@ public class AdminUsers_bean {
         }
         else{
             if (user.getPassword().equals("")){
-                user.setPassword(DigestUtils.shaHex(userFinded.getPassword()));
+                user.setPassword(userFinded.getPassword());
             } else {
-                user.setPassword(DigestUtils.shaHex(user.getPassword()));
+                user.setPassword(user.getPassword());
             }
             if (!restUsers.updateUser(user)){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existen errores al editar el usuario", "Error en el formulario"));
@@ -160,6 +161,7 @@ public class AdminUsers_bean {
         }
         init();
         list_roles.clear();
+        listUsers = restUsers.findAllUsers();
         PrimeFaces.current().executeScript("PF('editUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }

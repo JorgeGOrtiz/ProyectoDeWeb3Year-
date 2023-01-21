@@ -21,7 +21,7 @@
     <h:outputStylesheet library="css" name="vendor.bundle.base.css"/>
     <h:outputStylesheet library="css" name="style.css"/>
     <h:outputStylesheet library="css" name="bootstrap.min.css"/>
-    <title>AdminUsers ::<ui:insert name="title"/> </title>
+    <title>Indice ::<ui:insert name="title"/> </title>
 </h:head>
 
 <h:body>
@@ -31,8 +31,8 @@
         <nav class="navbar col-lg-12 col-12 p-0 d-flex flex-row">
             <div class="navbar-brand-wrapper d-flex justify-content-center">
                 <div class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
-                    <a class="navbar-brand brand-logo" href="../../index.html"><img src="/resources/images/logo.svg" alt="logo"/></a>
-                    <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="/resources/images/logo-mini.svg" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo" href="../../index.html"><img src="/resources/images/OIP%20(2).png" alt="logo"/></a>
+                    <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="/resources/images/OIP%20(2).png" alt="logo"/></a>
                     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                         <span class="mdi mdi-sort-variant"></span>
                     </button>
@@ -181,34 +181,26 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="mdi mdi-circle-outline menu-icon"></i>
-                            <span class="menu-title">Pages</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="collapse" id="ui-basic">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item">
-                                    <p:link href="/pages/AdminCliente.faces">
-                                        <i class="mdi mdi-grid-large menu-icon"></i>
-                                        <span class="menu-title">Administrar Cliente</span>
-                                    </p:link></li>
-                                <li class="nav-item">
-                                    <p:link href="/pages/AdminTransaccion.faces">
-                                        <i class="mdi mdi-grid-large menu-icon"></i>
-                                        <span class="menu-title">Administrar Transacciones</span>
-                                    </p:link>
-                                </li>
-                                <li class="nav-item">
-                                    <p:link href="/pages/AdminTipoCuenta.faces">
-                                        <i class="mdi mdi-grid-large menu-icon"></i>
-                                        <span class="menu-title">Administrar Tipo de Cuentas</span>
-                                    </p:link>
-                                </li>
-                                </ul>
-                        </div>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">-->
+<!--                            <i class="mdi mdi-circle-outline menu-icon"></i>-->
+<!--                            <span class="menu-title">Pages</span>-->
+<!--                            <i class="menu-arrow"></i>-->
+<!--                        </a>-->
+<!--                        <div class="collapse" id="ui-basic">-->
+<!--                            <ul class="nav flex-column sub-menu">-->
+<!--                                <li class="nav-item">-->
+
+<!--                                <p:link href="/pages/AdminGrupoAnimal.faces">-->
+<!--                                    <i class="mdi mdi-grid-large menu-icon"></i>-->
+<!--                                    <span class="menu-title">Administrar Grupo Animal</span>-->
+<!--                                </p:link>-->
+<!--                                </li>-->
+
+
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </li>-->
 <!--                    <li class="nav-item">-->
 <!--                        <a class="nav-link" href="../../pages/forms/basic_elements.html">-->
 <!--                            <i class="mdi mdi-view-headline menu-icon"></i>-->
@@ -236,7 +228,7 @@
                     <li class="nav-item" style="#{template_bean.translateRole_visible(template_bean.role_admin)}">
                         <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
                             <i class="mdi mdi-account menu-icon"></i>
-                            <span class="menu-title">Users</span>
+                            <span class="menu-title">Tablas</span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse" id="auth">
@@ -245,6 +237,14 @@
                                     <p:link href="/pages/AdminUsers.faces">
                                         <i class="mdi mdi-account menu-icon"></i>
                                         <span class="menu-title">Administrar Usuarios</span>
+                                    </p:link>
+                                </li>
+                            </ul>
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <p:link href="/pages/AdminGrupoAnimal.faces">
+                                        <i class="mdi mdi-account menu-icon"></i>
+                                        <span class="menu-title">Administrar Grupos Animales</span>
                                     </p:link>
                                 </li>
                             </ul>
@@ -265,10 +265,10 @@
                     <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Striped Table</h4>
-                                    <p class="card-description">
-                                        Add class <code>.table-striped</code>
-                                    </p>
+<!--                                    <h4 class="card-title">Striped Table</h4>-->
+<!--                                    <p class="card-description">-->
+<!--                                        Add class <code>.table-striped</code>-->
+<!--                                    </p>-->
                                     <div class="table-responsive">
                                         <ui:insert name="content"></ui:insert>
                                     </div>

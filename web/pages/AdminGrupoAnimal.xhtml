@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Jorge
+  Date: 21/1/2023
+  Time: 22:37
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+
+<h:head>
+
+</h:head>
+
+<h:body>
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">Administrar Grupo animal</ui:define>
+        <ui:define name="content">
+
+            <h1>Administrar Grupos Animales</h1>
+            #{grupoanimal_bean.init()}
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true"/>
+                <div class="row">
+                    <div class="col col-sm-2">
+                        <p:commandButton styleClass="btn btn-primary mr-2" icon="mdi mdi-library-plus" value="Adicionar"
+                                         process="@this"
+                                         actionListener="#{grupoanimal_bean.cleanVariables()}"
+                                         oncomplete="PF('addGrupoAnimalDialog').show()" style="margin-right: .5rem"/>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-12">
+                        <p:dataTable tableStyleClass="table-striped" id="dt-grupoanimal" var="grupoanimal"
+                                     value="#{grupoanimal_bean.listGrupoanimal}"
+                                     reflow="true"
+                                     styleclass="table"
+                                     paginator="true" rows="10" paginatorPosition="botton">
+                            <f:facet name="header">
+                                <div class="table-header">
+                                    <span style="font-weight: bold">Grupos Animales</span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Identificacion" filterBy="#{grupoanimal.idGrupoAnimal}"
+                                                sortBy="#{grupoanimal.idGrupoAnimal}">
+                            <h:outputText value="#{grupoanimal.idGrupoAnimal}"/>
+                        </p:column>
+                            <p:column headerText="Nombre de grupo animal" filterBy="#{grupoanimal.nombregrupoanimal}"
+                                      sortBy="#{grupoanimal.nombregrupoanimal}">
+                                <h:outputText value="#{grupoanimal.nombregrupoanimal}"/>
+                            </p:column>
+
+                            <p:column headerText="Opciones" exportable="flase">
+                                <p:commandButton icon="ui-icon-info" update=":form:info-grupoanimal-content" process="@this"
+                                                 oncomplete="PF('infoGrupoAnimalDialog').show()" actionListener="#{grupoanimal_bean.copyEdit(grupoanimal)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-edit" update=":form:edit-grupoanimal-content" process="@this"
+                                                 oncomplete="PF('editGrupoAnimalDialog').show()"
+                                                 actionListener="#{grupoanimal_bean.copyEdit(grupoanimal)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" process="@this"
+                                                 oncomplete="PF('deleteGrupoAnimalDialog').show()">
+                                    <f:setPropertyActionListener value="#{grupoanimal}" target="#{grupoanimal_bean.grupoanimal}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+                <!--Adicionar usuario dialog-->
+                <p:dialog header="Adicionar Grupo animal" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="addGrupoAnimalDialog"
+                          id="addGrupoAnimalDialog" resposive="true">
+                    <p:outputPanel id="manage-grupoanimal-content" class="ui-fluid">
+                        #{grupoanimal_bean.cleanVariables()}
+                        <p:outputPanel>
+                            <div class="p-field">
+                            <p:outputLabel for="id">Identificacion</p:outputLabel>
+                            <p:inputMask id="id" value="#{grupoanimal_bean.id_grupo_animal}" mask="99999999999"
+                                         required="true"/>
+                        </div>
+                            <div class="p-field">
+                                <p:outputLabel for="username">Nombre de grupo animal</p:outputLabel>
+                                <p:inputText id="username" value="#{grupoanimal_bean.nombregrupoanimal}" required="true">
+                                    <f:validateRegex pattern="[a-z]+[0-9]*[_.-]?[a-z0-9]+$"/>
+                                </p:inputText>
+                            </div>
+
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio."
+                                         style="width:100%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check"
+                                         actionListener="#{grupoanimal_bean.createGrupoanimal}"
+                                         update="manage-grupoanimal-content" process="manage-grupoanimal-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('addGrupoAnimalDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+
+                <!--Editar usuario dialog-->
+                <p:dialog header="Editar grupo animal" height="400" width="450" showEffect="fade" modal="true" widgetVar="editGrupoAnimalDialog"
+                          id="editGrupoAnimalDialog" resposive="true">
+                    <p:outputPanel id="edit-grupoanimal-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <p:outputLabel for="username1">Nombre de grupoa animal</p:outputLabel>
+                                <p:inputText id="username1" value="#{grupoanimal_bean.grupoanimal.nombregrupoanimal}" required="true">
+                                    <f:validateRegex pattern="[a-z]+[0-9]*[_.-]?[a-z0-9]+$"/>
+                                </p:inputText>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="id1">Identificacion</p:outputLabel>
+                                <p:inputMask id="id1" value="#{grupoanimal_bean.grupoanimal.idGrupoAnimal}" mask="99999999999"
+                                             required="true"/>
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio."
+                                         style="width:100%"/>
+
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{grupoanimal_bean.edit()}"
+                                         update="edit-grupoanimal-content" process="edit-grupoanimal-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editGrupoAnimalDialog').hide()"
+                                         class="ui-button-secondary" update="edit-grupoanimal-content"
+                                         process="edit-grupoanimal-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+                <!--Info usuario dialog-->
+                <p:dialog header="Informacion del grupo animal" width="450" showEffect="fade" modal="true"
+                          widgetVar="infoGrupoAnimalDialog"
+                          id="infoGrupoAnimalDialog" resposive="true">
+                    <p:outputPanel id="info-grupoanimal-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <strong>Identificacion:</strong>
+                                <p:outputLabel>#{grupoanimal_bean.grupoanimal.idGrupoAnimal}</p:outputLabel>
+                            </div>
+                            <div class="p-field">
+                                <strong>Nombre de grupo animal:</strong>
+                                <p:outputLabel>#{grupoanimal_bean.grupoanimal.nombregrupoanimal}</p:outputLabel>
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('infoGrupoAnimalDialog').hide()"
+                                         class="ui-button-secondary" update="info-grupoanimal-content"
+                                         process="info-grupoanimal-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+                <!--Confirm dialog-->
+                <p:confirmDialog widgetVar="deleteGrupoAnimalDialog" showEffect="fade" width="300"
+                                 message="Eliminar el grupo animal"
+                                 header="Confirm" severity="warn">
+                    <p:commandButton value="Si" icon="ui-icon-check" actionListener="#{grupoanimal_bean.delete}"
+                                     process="@this" oncomplete="PF('deleteGrupoAnimalDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="ui-icon-times"
+                                     onclick="PF('deleteGrupoAnimalDialog').hide()"/>
+                </p:confirmDialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="ui-icon-times"/>
+                </p:confirmDialog>
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>
