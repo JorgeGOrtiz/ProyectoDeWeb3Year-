@@ -76,7 +76,7 @@
                     </div>
                 </div>
 
-                <!--Adicionar usuario dialog-->
+
                 <p:dialog header="Adicionar Grupo animal" height="400" width="450" showEffect="fade" modal="true"
                           widgetVar="addGrupoAnimalDialog"
                           id="addGrupoAnimalDialog" resposive="true">
@@ -85,7 +85,7 @@
                         <p:outputPanel>
                             <div class="p-field">
                             <p:outputLabel for="id">Identificacion</p:outputLabel>
-                            <p:inputMask id="id" value="#{grupoanimal_bean.id_grupo_animal}" mask="99999999999"
+                            <p:inputNumber id="id" value="#{grupoanimal_bean.id_grupo_animal}" decimalPlaces="0"
                                          required="true"/>
                         </div>
                             <div class="p-field">
@@ -109,21 +109,21 @@
                     </f:facet>
                 </p:dialog>
 
-                <!--Editar usuario dialog-->
+
                 <p:dialog header="Editar grupo animal" height="400" width="450" showEffect="fade" modal="true" widgetVar="editGrupoAnimalDialog"
                           id="editGrupoAnimalDialog" resposive="true">
                     <p:outputPanel id="edit-grupoanimal-content" class="ui-fluid">
                         <p:outputPanel>
                             <div class="p-field">
-                                <p:outputLabel for="username1">Nombre de grupoa animal</p:outputLabel>
+                                <p:outputLabel for="id1">id de grupo animal</p:outputLabel>
+                                <p:inputMask id="id1" value="#{grupoanimal_bean.grupoanimal.idGrupoAnimal}" required="true" disabled="true" mask="99999999">
+                                </p:inputMask>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="username1">Nombre de grupo animal</p:outputLabel>
                                 <p:inputText id="username1" value="#{grupoanimal_bean.grupoanimal.nombregrupoanimal}" required="true">
                                     <f:validateRegex pattern="[a-z]+[0-9]*[_.-]?[a-z0-9]+$"/>
                                 </p:inputText>
-                            </div>
-                            <div class="p-field">
-                                <p:outputLabel for="id1">Identificacion</p:outputLabel>
-                                <p:inputMask id="id1" value="#{grupoanimal_bean.grupoanimal.idGrupoAnimal}" mask="99999999999"
-                                             required="true"/>
                             </div>
 
                         </p:outputPanel>
@@ -140,7 +140,7 @@
                     </f:facet>
                 </p:dialog>
 
-                <!--Info usuario dialog-->
+
                 <p:dialog header="Informacion del grupo animal" width="450" showEffect="fade" modal="true"
                           widgetVar="infoGrupoAnimalDialog"
                           id="infoGrupoAnimalDialog" resposive="true">
@@ -164,7 +164,7 @@
                     </f:facet>
                 </p:dialog>
 
-                <!--Confirm dialog-->
+
                 <p:confirmDialog widgetVar="deleteGrupoAnimalDialog" showEffect="fade" width="300"
                                  message="Eliminar el grupo animal"
                                  header="Confirm" severity="warn">

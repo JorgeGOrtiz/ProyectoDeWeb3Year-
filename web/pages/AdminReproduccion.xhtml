@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Jorge
+  Date: 23/1/2023
+  Time: 15:15
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+
+</h:head>
+
+<h:body>
+
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">Administrar Reproduccion Animal</ui:define>
+        <ui:define name="content">
+
+            <h1>Administrar Reproduccion Animal</h1>
+            #{reproduccion_bean.init()}
+
+            <h:form id="form" enctype="multipart/form-data">
+                <!-- <p:growl id="messages" showDetail="true"/> -->
+                <div class="row">
+                    <div class="col col-sm-2">
+                        <p:commandButton styleClass="btn btn-primary mr-2" icon="mdi mdi-library-plus" value="Adicionar"
+                                         process="@this"
+                                         actionListener="#{reproduccion_bean.cargarGrupoAnimal()}"
+                                         update="addReproduccionDialog"
+                                         oncomplete="PF('addReproduccionDialog').show()" style="margin-right: .5rem"/>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-12">
+                        <p:dataTable tableStyleClass="table-striped" id="dt-reproduccion" var="reproduccion"
+                                     value="#{reproduccion_bean.listreproduccion}"
+                                     reflow="true"
+                                     styleclass="table"
+                                     paginator="true" rows="100" paginatorPosition="botton">
+
+                            <f:facet name="header">
+                                <div class="table-header">
+                                    <span style="font-weight: bold">Reproduccion</span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="IdReproduccion" filterBy="#{reproduccion.reproduccionPK.idReproduccion}"
+                                      sortBy="#{reproduccion.reproduccionPK.idReproduccion}">
+                                <h:outputText value="#{reproduccion.reproduccionPK.idReproduccion}"/>
+                            </p:column>
+
+                            <p:column headerText="IdGrupo" filterBy="#{reproduccion.reproduccionPK.especieanimalgrupoanimalidGrupoAnimal}"
+                                      sortBy="#{reproduccion.reproduccionPK.especieanimalgrupoanimalidGrupoAnimal}">
+                                <h:outputText value="#{reproduccion.reproduccionPK.especieanimalgrupoanimalidGrupoAnimal}"/>
+                            </p:column>
+
+                            <p:column headerText="IdEspecie" filterBy="#{reproduccion.reproduccionPK.especieanimalidEspecieAnimal}"
+                                      sortBy="#{reproduccion.reproduccionPK.especieanimalidEspecieAnimal}">
+                                <h:outputText value="#{reproduccion.reproduccionPK.especieanimalidEspecieAnimal}"/>
+                            </p:column>
+
+                            <p:column headerText="EtapadeApareamiento" filterBy="#{reproduccion.etepaDeApareamiento}"
+                                      sortBy="#{reproduccion.etepaDeApareamiento}">
+                                <h:outputText value="#{reproduccion.etepaDeApareamiento}"/>
+                            </p:column>
+
+                            <p:column headerText="duracionEtapaDeApareamiento" filterBy="#{reproduccion.duracionEtepaDeApareamiento}" sortBy="#{reproduccion.duracionEtepaDeApareamiento}">
+                                <h:outputText value="#{reproduccion.duracionEtepaDeApareamiento}"/>
+                            </p:column>
+                            <p:column headerText="duracionPeriodoDeGestacion" filterBy="#{reproduccion.duracionPeriodoDeGestaion}" sortBy="#{reproduccion.duracionPeriodoDeGestaion}">
+                                <h:outputText value="#{reproduccion.duracionPeriodoDeGestaion}"/>
+                            </p:column>
+
+                            <p:column headerText="Opciones" exportable="flase">
+                                <p:commandButton icon="ui-icon-info" update=":form:info-reproduccion-content" process="@this"
+                                                 oncomplete="PF('infoReproduccionDialog').show()"
+                                                 actionListener="#{reproduccion_bean.info(reproduccion)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-edit" update=":form:edit-reproduccion-content" process="@this"
+                                                 oncomplete="PF('editReproduccionDialog').show()"
+                                                 actionListener="#{reproduccion_bean.copyEdit(reproduccion)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" process="@this"
+                                                 oncomplete="PF('deleteReproduccionDialog').show()">
+                                    <f:setPropertyActionListener value="#{reproduccion}" target="#{reproduccion_bean.reproduccion}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+
+                <p:dialog header="Adicionar Reproduccion Animal" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="addReproduccionDialog"
+                          id="addReproduccionDialog" resposive="true">
+                    <p:outputPanel id="manage-reproduccion-content" class="ui-fluid">
+                        <p:outputPanel>
+
+                            <div class="p-field">
+                                <p:outputLabel for="idReproduccion">Id de Reproduccion</p:outputLabel>
+                                <p:inputMask id="idReproduccion" value="#{reproduccion_bean.idReproduccion}" decimalPlaces="0"
+                                             required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="add_grupo">Grupo Animal</p:outputLabel>
+                                <p:selectOneMenu id="add_grupo" value="#{reproduccion_bean.grupoAdd}"
+                                                 valueChangeListener="#{reproduccion_bean.cargarEspecieAnimal}">
+                                    <p:ajax event="change" process="@this"/>
+                                    <f:selectItem itemLabel="Seleccione un Grupo" itemValue="-1"/>
+                                    <f:selectItems value="#{reproduccion_bean.list_grupoanimal}" var="grupo"
+                                                   itemValue="#{grupo.idGrupoAnimal}" itemLabel="#{grupo.idGrupoAnimal}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field">
+                                <p:outputLabel for="add_especie">Especie Animal</p:outputLabel>
+                                <p:selectOneMenu id="add_especie" value="#{reproduccion_bean.especieAdd}"
+                                                    >
+                                    <f:selectItem itemLabel="Seleccione una especie animal" itemValue="-1"/>
+                                    <f:selectItems value="#{reproduccion_bean.listespecieanimal}" var="especie"
+                                                   itemLabel="#{especie.especieanimalPK.idEspecieAnimal}"
+                                                   itemValue="#{especie.especieanimalPK.idEspecieAnimal}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="EtapadeApareamiento">Etapa de apareamiento</p:outputLabel>
+                                <p:inputText id="EtapadeApareamiento" value="#{reproduccion_bean.etapaDeApareamiento}" required="true">
+                                    <f:validateRegex pattern="[a-z]+[0-9]*[_.-]?[a-z0-9]+$"/>
+                                </p:inputText>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="duracionEtapaDeApareamiento">Duracion de la etapa de apareamiento</p:outputLabel>
+                                <p:inputText id="duracionEtapaDeApareamiento" value="#{reproduccion_bean.duracionEtapaDeApareamiento}" required="true">
+                                    <f:validateRegex
+                                            pattern="[a-zA-Z áéíóúüñÁÉÍÓÚÜÑ]+$"/>
+                                </p:inputText>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="duracionPeriodoDeGestacion">Duracion del periodo de gestacion</p:outputLabel>
+                                <p:inputText id="duracionPeriodoDeGestacion" value="#{reproduccion_bean.duracionPeriodoDeGestaion}" required="true">
+                                    <f:validateRegex
+                                            pattern="[a-zA-Z áéíóúüñÁÉÍÓÚÜÑ]+$"/>
+                                </p:inputText>
+                            </div>
+
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio."
+                                         style="width:100%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check"
+                                         action="#{reproduccion_bean.createReproduccion}"
+                                         update="manage-reproduccion-content" process="manage-reproduccion-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('addReproduccionDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:dialog header="Editar reproduccion" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="editReproduccionDialog"
+                          id="editReproduccionDialog" resposive="true">
+                    <p:outputPanel id="edit-reproduccion-content" class="ui-fluid">
+                        <p:outputPanel>
+
+                            <div class="p-field">
+                                <p:outputLabel for="idReproduccion1">Reproduccion</p:outputLabel>
+                                <p:inputMask id="idReproduccion1" value="#{reproduccion_bean.reproduccion.reproduccionPK.idReproduccion}" disabled="true"
+                                             decimalPlaces="0" required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="grupo1">Grupo Animal</p:outputLabel>
+                                <p:inputMask id="grupo1" value="#{reproduccion_bean.reproduccion.reproduccionPK.especieanimalgrupoanimalidGrupoAnimal}" disabled="true"
+                                             decimalPlaces="0" required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="especie1">Especie Animal</p:outputLabel>
+                                <p:inputMask id="especie1" value="#{reproduccion_bean.reproduccion.reproduccionPK.especieanimalidEspecieAnimal}"
+                                             disabled="true" decimalPlaces="0" required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="EtapadeApareamiento1">Etapas de apareamiento</p:outputLabel>
+                                <p:inputText id="EtapadeApareamiento1" value="#{reproduccion_bean.etapaDeApareamiento}" required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="duracionPeriodoDeGestacion1">Duracion del periodo de gestacion</p:outputLabel>
+                                <p:inputText id="duracionPeriodoDeGestacion1" value="#{reproduccion_bean.duracionPeriodoDeGestaion}" required="true">
+                                    <f:validateRegex
+                                            pattern="[a-zA-Z áéíóúüñÁÉÍÓÚÜÑ]+$"/>
+                                </p:inputText>
+                            </div>
+
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio." style="width:100%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{reproduccion_bean.edit()}"
+                                         update="edit-reproduccion-content" process="edit-reproduccion-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editReproduccionDialog').hide()"
+                                         class="ui-button-secondary" update="edit-reproduccion-content"
+                                         process="edit-reproduccion-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:dialog header="Informacion de Reproduccion Animal" width="450" showEffect="fade" modal="true"
+                          widgetVar="infoReproduccionDialog"
+                          id="infoReproduccionDialog" resposive="true">
+                    <p:outputPanel id="info-reproduccion-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <strong>Reproduccion:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.reproduccionPK.idReproduccion}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Etapas de apareamiento:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.etepaDeApareamiento}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Duracion de las etapas de apareamiento:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.duracionEtepaDeApareamiento}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Duracion del periodo de gestacion:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.duracionPeriodoDeGestaion}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Especie Animal:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.reproduccionPK.especieanimalidEspecieAnimal}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Grupo Animal:</strong>
+                                <p:outputLabel>#{reproduccion_bean.reproduccion.reproduccionPK.especieanimalgrupoanimalidGrupoAnimal}</p:outputLabel>
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('infoReproduccionDialog').hide()"
+                                         class="ui-button-secondary" update="info-reproduccion-content"
+                                         process="info-reproduccion-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:confirmDialog widgetVar="deleteReproduccionDialog" showEffect="fade" width="300"
+                                 message="Eliminar la Reproduccion Animal?"
+                                 header="Confirm" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" actionListener="#{reproduccion_bean.delete}"
+                                     process="@this" oncomplete="PF('deleteReproduccionDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteReproduccionDialog').hide()"/>
+                </p:confirmDialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times"/>
+                </p:confirmDialog>
+
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>

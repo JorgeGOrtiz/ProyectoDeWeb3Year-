@@ -26,46 +26,48 @@ public class Grupoanimal_bean {
         listGrupoanimal = restGrupoanimal.findAllGrupoanimals();
     }
 
-    public static List<Grupoanimal> getListGrupoanimal() {
+    public List<Grupoanimal> getListGrupoanimal() {
         return listGrupoanimal;
     }
 
-    public static void setListGrupoanimal(List<Grupoanimal> listGrupoanimal) {
-        Grupoanimal_bean.listGrupoanimal = listGrupoanimal;
+    public void setListGrupoanimal(List<Grupoanimal> listGrupoanimal) {
+        this.listGrupoanimal = listGrupoanimal;
     }
 
-    public static Integer getId_grupo_animal() {
+    public Integer getId_grupo_animal() {
         return id_grupo_animal;
     }
 
-    public static void setId_grupo_animal(Integer id_grupo_animal) {
-        Grupoanimal_bean.id_grupo_animal = id_grupo_animal;
+    public void setId_grupo_animal(Integer id_grupo_animal) {
+        this.id_grupo_animal = id_grupo_animal;
     }
 
-    public static String getNombregrupoanimal() {
+    public String getNombregrupoanimal() {
         return nombregrupoanimal;
     }
 
-    public static void setNombregrupoanimal(String nombregrupoanimal) {
-        Grupoanimal_bean.nombregrupoanimal = nombregrupoanimal;
+    public void setNombregrupoanimal(String nombregrupoanimal) {
+        this.nombregrupoanimal = nombregrupoanimal;
     }
 
-    public static Grupoanimal getGrupoanimal() {
+    public Grupoanimal getGrupoanimal() {
         return grupoanimal;
     }
 
-    public static void setGrupoanimal(Grupoanimal grupoanimal) {
-        Grupoanimal_bean.grupoanimal = grupoanimal;
+    public void setGrupoanimal(Grupoanimal grupoanimal) {
+        this.grupoanimal = grupoanimal;
     }
 
-    public static RestGrupoanimal getRestGrupoanimal() {
+    public RestGrupoanimal getRestGrupoanimal() {
         return restGrupoanimal;
     }
 
-    public static void setRestGrupoanimal(RestGrupoanimal restGrupoanimal) {
-        Grupoanimal_bean.restGrupoanimal = restGrupoanimal;
+    public void setRestGrupoanimal(RestGrupoanimal restGrupoanimal) {
+        this.restGrupoanimal = restGrupoanimal;
     }
-    public Grupoanimal_bean(){}
+
+    public Grupoanimal_bean() {
+    }
 
     public void cleanVariables(){
         id_grupo_animal= 0;
@@ -86,7 +88,7 @@ public class Grupoanimal_bean {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Existen errores en el formulario",""));
         }
         init();
-        PrimeFaces.current().executeScript("PF('addGrupoanimalDialog').hide()");
+        PrimeFaces.current().executeScript("PF('addGrupoAnimalDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages","form:dt-grupoanimal");
     }
     public void copyEdit(Grupoanimal grupoanimal1){
@@ -97,13 +99,14 @@ public class Grupoanimal_bean {
 
     public void edit(){
 
-        Grupoanimal grupoanimal_finded = restGrupoanimal.findByid_grupo_animal(id_grupo_animal);
+        Grupoanimal grupoanimal_finded = restGrupoanimal.findByid_grupo_animal(grupoanimal.getIdGrupoAnimal());
         if (grupoanimal_finded == null){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existen errores al editar el grupo animal", "Grupo animal Inexistente"));
         }
-        else{if (grupoanimal.getIdGrupoAnimal().equals("")){
-            grupoanimal.setIdGrupoAnimal(grupoanimal_finded.getIdGrupoAnimal());
-        }
+        else{
+//            if (grupoanimal.getIdGrupoAnimal().equals("")){
+//            grupoanimal.setIdGrupoAnimal(grupoanimal_finded.getIdGrupoAnimal());
+//        }
             if (!restGrupoanimal.updateGrupoanimal(grupoanimal)){
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Existen errores al editar el grupo animal", "Error en el formulario"));
             }
@@ -112,7 +115,7 @@ public class Grupoanimal_bean {
             }
         }
         init();
-        PrimeFaces.current().executeScript("PF('editGrupoanimalDialog').hide()");
+        PrimeFaces.current().executeScript("PF('editGrupoAnimalDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-grupoanimal");
     }
 

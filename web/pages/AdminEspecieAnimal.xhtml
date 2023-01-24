@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Jorge
+  Date: 23/1/2023
+  Time: 06:42
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+
+</h:head>
+
+<h:body>
+
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">Administrar Especie Animal</ui:define>
+        <ui:define name="content">
+
+            <h1>Administrar Especie Animal</h1>
+            #{especieanimal_bean.init()}
+
+
+            <h:form id="form" enctype="multipart/form-data">
+                <!-- <p:growl id="messages" showDetail="true"/> -->
+                <div class="row">
+                    <div class="col col-sm-2">
+                        <p:commandButton styleClass="btn btn-primary mr-2" icon="mdi mdi-library-plus" value="Adicionar"
+                                         process="@this"
+                                         actionListener="#{especieanimal_bean.cargarGrupoAnimal()}"
+                                         update="addEspecieAnimalDialog"
+                                         oncomplete="PF('addEspecieAnimalDialog').show()" style="margin-right: .5rem"/>
+                        <br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-12">
+                        <p:dataTable tableStyleClass="table-striped" id="dt-especieanimal" var="especieanimal"
+                                     value="#{especieanimal_bean.listespecieanimal}"
+                                     reflow="true"
+                                     styleclass="table"
+                                     paginator="true" rows="100" paginatorPosition="botton">
+
+                            <f:facet name="header">
+                                <div class="table-header">
+                                    <span style="font-weight: bold">Especie Animal</span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="IdEspecieAnimal" filterBy="#{especieanimal.especieanimalPK.idEspecieAnimal}"
+                                      sortBy="#{especieanimal.especieanimalPK.idEspecieAnimal}">
+                                <h:outputText value="#{especieanimal.especieanimalPK.idEspecieAnimal}"/>
+                            </p:column>
+
+                            <p:column headerText="IdGrupoAnimal" filterBy="#{especieanimal.especieanimalPK.grupoanimalidGrupoAnimal}"
+                                      sortBy="#{especieanimal.especieanimalPK.grupoanimalidGrupoAnimal}">
+                                <h:outputText value="#{especieanimal.especieanimalPK.grupoanimalidGrupoAnimal}"/>
+                            </p:column>
+
+
+
+                            <p:column headerText="NombreEspecieAnimal" filterBy="#{especieanimal.nombreEspecieAnimal}"
+                                      sortBy="#{especieanimal.nombreEspecieAnimal}">
+                                <h:outputText value="#{especieanimal.nombreEspecieAnimal}"/>
+                            </p:column>
+
+
+
+                            <p:column headerText="Opciones" exportable="flase">
+                                <p:commandButton icon="ui-icon-info" update=":form:info-especieanimal-content" process="@this"
+                                                 oncomplete="PF('infoEspecieAnimalDialog').show()"
+                                                 actionListener="#{especieanimal_bean.info(especieanimal)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-edit" update=":form:edit-especieanimal-content" process="@this"
+                                                 oncomplete="PF('editEspecieAnimalDialog').show()"
+                                                 actionListener="#{especieanimal_bean.copyEdit(especieanimal)}">
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" process="@this"
+                                                 oncomplete="PF('deleteEspecieAnimalDialog').show()">
+                                    <f:setPropertyActionListener value="#{especieanimal}" target="#{especieanimal_bean.especieanimal}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+
+                <p:dialog header="Adicionar Tesis" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="addEspecieAnimalDialog"
+                          id="addEspecieAnimalDialog" resposive="true">
+                    <p:outputPanel id="manage-especieanimal-content" class="ui-fluid">
+                        <p:outputPanel>
+
+                            <div class="p-field">
+                                <p:outputLabel for="idEspecieAnimal">Id de Especie Animal</p:outputLabel>
+                                <p:inputMask id="idEspecieAnimal" value="#{especieanimal_bean.idEspecieanimal}" decimalPlaces="0"
+                                             required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="add_GrupoAnimal">Grupo Animal</p:outputLabel>
+                                <p:selectOneMenu id="add_GrupoAnimal" value="#{especieanimal_bean.grupoAdd}"
+                                                 valueChangeListener="#{especieanimal_bean.cargarGrupoAnimal}">
+                                    <p:ajax event="change" process="@this"/>
+                                    <f:selectItem itemLabel="Seleccione un Grupo Animal" itemValue="-1"/>
+                                    <f:selectItems value="#{especieanimal_bean.list_grupoanimal}" var="grupoanimal"
+                                                   itemValue="#{grupoanimal.idGrupoAnimal}" itemLabel="#{grupoanimal.idGrupoAnimal}"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="nombreEspecieAnimal">Nombre de Especie Animal</p:outputLabel>
+                                <p:inputText id="nombreEspecieAnimal" value="#{especieanimal_bean.nombreEspecieAnimal}" required="true">
+                                    <f:validateRegex pattern="[a-z]+[0-9]*[_.-]?[a-z0-9]+$"/>
+                                </p:inputText>
+                            </div>
+
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio."
+                                         style="width:100%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check"
+                                         action="#{especieanimal_bean.createEspecieanimal}"
+                                         update="manage-especieanimal-content" process="manage-especieanimal-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('addEspecieAnimalDialog').hide()"
+                                         class="ui-button-secondary"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:dialog header="Editar Especie Animal" height="400" width="450" showEffect="fade" modal="true"
+                          widgetVar="editEspecieAnimalDialog"
+                          id="editTesisDialog" resposive="true">
+                    <p:outputPanel id="edit-especieanimal-content" class="ui-fluid">
+                        <p:outputPanel>
+
+                            <div class="p-field">
+                                <p:outputLabel for="idEspecieAnimal1">Tesis</p:outputLabel>
+                                <p:inputMask id="idEspecieAnimal1" value="#{especieanimal_bean.especieanimal.especieanimalPK.idEspecieAnimal}" disabled="true"
+                                             decimalPlaces="0" required="true"/>
+                            </div>
+
+                            <div class="p-field">
+                                <p:outputLabel for="grupoAnimal1">Curso</p:outputLabel>
+                                <p:inputMask id="grupoAnimal1" value="#{especieanimal_bean.especieanimal.especieanimalPK.grupoanimalidGrupoAnimal}" disabled="true"
+                                             decimalPlaces="0" required="true"/>
+                            </div>
+
+
+                            <div class="p-field">
+                                <p:outputLabel for="nombreEspecieAnimal1">Nombre de especie animal</p:outputLabel>
+                                <p:inputText id="nombreEspecieAnimal1" value="#{especieanimal_bean.nombreEspecieAnimal}" required="true"/>
+                            </div>
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:staticMessage severity="error" summary="*" detail="Campos de llenado obligatorio." style="width:100%"/>
+                        <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{especieanimal_bean.edit()}"
+                                         update="edit-especieanimal-content" process="edit-especieanimal-content @this"/>
+                        <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editEspecieAnimalDialog').hide()"
+                                         class="ui-button-secondary" update="edit-especieanimal-content"
+                                         process="edit-especieanimal-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:dialog header="Informacion de Especie Animal" width="450" showEffect="fade" modal="true"
+                          widgetVar="infoEspecieAnimalDialog"
+                          id="infoEspecieAnimalDialog" resposive="true">
+                    <p:outputPanel id="info-especieanimal-content" class="ui-fluid">
+                        <p:outputPanel>
+                            <div class="p-field">
+                                <strong>Especie animal:</strong>
+                                <p:outputLabel>#{especieanimal_bean.especieanimal.especieanimalPK.idEspecieAnimal}</p:outputLabel>
+                            </div>
+
+                            <div class="p-field">
+                                <strong>Nombre de Especie animal:</strong>
+                                <p:outputLabel>#{especieanimal_bean.especieanimal.nombreEspecieAnimal}</p:outputLabel>
+                            </div>
+
+
+                        </p:outputPanel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('infoEspecieAnimalDialog').hide()"
+                                         class="ui-button-secondary" update="info-especieanimal-content"
+                                         process="info-especieanimal-content @this"/>
+                    </f:facet>
+                </p:dialog>
+
+
+                <p:confirmDialog widgetVar="deleteEspecieAnimalDialog" showEffect="fade" width="300"
+                                 message="Eliminar la Especie Animal?"
+                                 header="Confirm" severity="warn">
+                    <p:commandButton value="Si" icon="pi pi-check" actionListener="#{especieanimal_bean.delete()}"
+                                     process="@this" oncomplete="PF('deleteEspecieAnimalDialog').hide()"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                     onclick="PF('deleteEspecieAnimalDialog').hide()"/>
+                </p:confirmDialog>
+                <p:confirmDialog global="true" showEffect="fade" width="300">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                     icon="pi pi-times"/>
+                </p:confirmDialog>
+
+                <input type="hidden"
+                       name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+            </h:form>
+
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>
